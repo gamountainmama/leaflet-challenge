@@ -19,7 +19,7 @@ var marker = L.marker([34.86203568439478, -84.07681774444292], {
 marker.bindPopup('This is where Carol lives.')
 
 // read in the GeoJSON data
-const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.geojson';
+const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';
 var data = d3.json(url).then(function(data){
     console.log(data);
 
@@ -27,10 +27,10 @@ var data = d3.json(url).then(function(data){
     console.log(features);
 
     // create a list for the coordinates
-    var latitudes = features.map(d => d.geometry.coordinates[0])
+    var latitudes = features.map(d => d.geometry.coordinates[1])
     console.log(latitudes);
 
-    var longitudes = features.map(d => d.geometry.coordinates[1])
+    var longitudes = features.map(d => d.geometry.coordinates[0])
     console.log(longitudes);
 
     // create a list for the magnitudes
@@ -52,6 +52,6 @@ var data = d3.json(url).then(function(data){
     for (var j = 0; j < info.length; j++) {
         var marker = info[j];
         console.log(marker)
-        L.circle([marker.latitude, marker.longitude],{radius: 100000*marker.magnitude, color: marker.depth}).addTo(myMap)
+        L.circle([marker.latitude, marker.longitude],{radius: 30000*marker.magnitude, color: marker.depth}).addTo(myMap)
     }
 });
