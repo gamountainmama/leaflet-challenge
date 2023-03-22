@@ -4,22 +4,7 @@ const myMap = L.map('map', {
     zoom: 4
 });
 
-// add a tile layer
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 15,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(myMap);
-
-// create a marker (just for fun!!!)
-var marker = L.marker([34.86203568439478, -84.07681774444292], {
-    title: 'Love Shack'
-}).addTo(myMap)
-
-// add a popup to the marker
-marker.bindPopup('This is where I live.')
-
-// populates the map selection dropdown
-
+// populate the map selection options for the dropdown menu
 const choices = [
     {'choice': 'all earthquakes in the past hour',
     'url': 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson'},
@@ -54,6 +39,25 @@ var init_id = urls[0]
 console.log(init_id)
 
 function redraw(url) {
+    // removes previous map layers
+    myMap.eachLayer((layer) => { layer. remove(); });
+
+    // add a tile layer
+    L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+	maxZoom: 17,
+	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    }).addTo(myMap);
+
+    //L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //maxZoom: 15, 
+        //attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    //}).addTo(myMap);
+
+    // create a marker (just for fun!!!)
+    var marker = L.marker([34.86203568439478, -84.07681774444292], {title: 'Love Shack'}).addTo(myMap)
+
+    // add a popup to the marker
+    marker.bindPopup('This is where I live.')
     
     // retrieves the data from the USGS GeoJSON
     var data = d3.json(url).then(function(data){
