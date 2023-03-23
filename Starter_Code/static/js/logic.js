@@ -85,22 +85,15 @@ function redraw(url) {
             'magnitude': magnitudes[i]})
         }
 
-        // NEED TO REMOVE OLD CIRCLES
-        if (myMap.hasLayer(circle)) {
-            myMap.removeLayer(circle);
-        }
-
         // create a circle for each earthquake
         // NEED TO COLOR MAP CIRCLES
-        // NEED TO CREATE HOVER AND CLICK FUNCTIONS
+        // NEED TO CREATE HOVER FUNCTIONS
         for (var j = 0; j < info.length; j++) {
             var circle = info[j];
             L.circle([circle.latitude, circle.longitude],{
                 radius: 10000*circle.magnitude, 
-                color: 'red',
-                interactive:true,
-                click: 'Hi'
-            }).addTo(myMap)
+                color: 'red'
+            }).bindPopup(`<h1>Magnitude ${circle.magnitude}</h1><h2>Depth: ${circle.depth}</h2><hr><h3>Lat: ${parseFloat(circle.latitude).toFixed(2)}, Long: ${parseFloat(circle.longitude).toFixed(2)}</h3>`).addTo(myMap);
         }
     })};
 
