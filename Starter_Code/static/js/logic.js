@@ -5,6 +5,161 @@ const myMap = L.map('map', {
     layer: [street, overlayMaps]
 });
 
+// Adding the tile layer
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(myMap);
+
+// create a marker (just for fun!!!)
+var marker = L.marker([34.86203568439478, -84.07681774444292], {title: 'Love Shack'}).addTo(myMap)
+
+// add a popup to the marker
+marker.bindPopup('This is where I live.')
+
+// arrays that will hold the circle markers
+var hourCircles = [];
+var dayCircles = [];
+var weekCircles = [];
+var monthCircles = [];
+
+// Create four separate layer groups, one for each time frame.
+var hourLayer = L.layerGroup(hourCircles);
+var dayLayer = L.layerGroup(dayCircles);
+var weekLayer = L.layerGroup(weekCircles);
+var monthLayer = L.layerGroup(monthCircles);
+console.log(hourCircles)
+
+// Create an overlay object.
+var overlayMaps = {
+    'Earthquakes in the past hour': hourLayer,
+    'Earthquakes in the past 24 hours': dayLayer,
+    'Earthquakes in the past 7 days': weekLayer,
+    'Earthquakes in the past 30 days': monthLayer
+  };
+
+// overlay selection links
+var links = [
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson',
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson',
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson',
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson'
+];
+
+// create circles for earthquakes in the past hour
+var data = d3.json(links[0]).then(function(data) {
+    features = data.features;
+    console.log(features)
+
+    for (var j = 0; j < features.length; j++) {
+        geometry = features[j].geometry;
+        coordinates = geometry.coordinates;
+        longitude = coordinates[0];
+        latitude = coordinates[1];
+        depth = coordinates[2];
+        properties = features[j].properties;
+        magnitude = properties.mag;
+        
+        hourCircles.push(
+        L.circle([latitude, longitude], {
+            radius: 10000*magnitude,
+            color: circleColor(depth),
+            fillColor: circleColor(depth),
+            fillOpacity: 0.5,
+            weight: 0.5
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`)
+        )
+    }
+})
+
+// create circles for earthquakes in the past day
+var data = d3.json(links[1]).then(function(data) {
+    features = data.features;
+    console.log(features)
+
+    for (var j = 0; j < features.length; j++) {
+        geometry = features[j].geometry;
+        coordinates = geometry.coordinates;
+        longitude = coordinates[0];
+        latitude = coordinates[1];
+        depth = coordinates[2];
+        properties = features[j].properties;
+        magnitude = properties.mag;
+        
+        dayCircles.push(
+        L.circle([latitude, longitude], {
+            radius: 10000*magnitude,
+            color: circleColor(depth),
+            fillColor: circleColor(depth),
+            fillOpacity: 0.5,
+            weight: 0.5
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`)
+        )
+    }
+})
+
+// create circles for earthquakes in the past week
+var data = d3.json(links[2]).then(function(data) {
+    features = data.features;
+    console.log(features)
+
+    for (var j = 0; j < features.length; j++) {
+        geometry = features[j].geometry;
+        coordinates = geometry.coordinates;
+        longitude = coordinates[0];
+        latitude = coordinates[1];
+        depth = coordinates[2];
+        properties = features[j].properties;
+        magnitude = properties.mag;
+        
+        weekCircles.push(
+        L.circle([latitude, longitude], {
+            radius: 10000*magnitude,
+            color: circleColor(depth),
+            fillColor: circleColor(depth),
+            fillOpacity: 0.5,
+            weight: 0.5
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`)
+        )
+    }
+})
+
+// create circles for earthquakes in the past month
+var data = d3.json(links[2]).then(function(data) {
+    features = data.features;
+    console.log(features)
+
+    for (var j = 0; j < features.length; j++) {
+        geometry = features[j].geometry;
+        coordinates = geometry.coordinates;
+        longitude = coordinates[0];
+        latitude = coordinates[1];
+        depth = coordinates[2];
+        properties = features[j].properties;
+        magnitude = properties.mag;
+        
+        monthCircles.push(
+        L.circle([latitude, longitude], {
+            radius: 10000*magnitude,
+            color: circleColor(depth),
+            fillColor: circleColor(depth),
+            fillOpacity: 0.5,
+            weight: 0.5
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`)
+        )
+    }
+})
+
+// create function to color the circles by depth
+function circleColor(depth) {
+    if (depth <= 10) return 'green'
+    else if (depth <= 30) return 'yellow'
+    else if (depth <= 50) return 'beige'
+    else if (depth <= 70) return 'orange'
+    else if (depth <= 90) return 'pink'
+    else if (depth > 90) return 'red'
+    else return 'black'
+};
+
 // Define variables for our tile layers.
 var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -20,113 +175,24 @@ var baseMaps = {
   Topography: topo
 };
 
-// Create four separate layer groups: one for each time frame.
-var hour = L.layerGroup(hourCircles);
-var day = L.layerGroup(dayCircles);
-var week = L.layerGroup(weekCircles);
-var month = L.layerGroup(monthCircles);
-
-// Create an overlay object.
-var overlayMaps = {
-    'All earthquakes in the past hour': hour,
-    'All earthquakes in the past day': day,
-    'All earthquakes in the past week': week,
-    'All earthquakes in the past month': month
-  };
-
-// Adding the tile layer
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(myMap);
-
-// create a marker (just for fun!!!)
-    var marker = L.marker([34.86203568439478, -84.07681774444292], {title: 'Love Shack'}).addTo(myMap)
-
-// add a popup to the marker
-    marker.bindPopup('This is where I live.')
-
-// link to the GeoJSON data.
-var link = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
-
-var timeCircles = [{hourCircles}, {dayCircles}, {weekCircles}, {monthCircles}]
-var hourCircles = [];
-var dayCircles = [];
-var weekCircles = [];
-var monthCircles = [];
-
-// map selection options
-var links = [
-    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson',
-    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson',
-    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson',
-    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson'
-];
-
-// retrieve the data from USGS GeoJSON
-for (i = 0; i < links.length; i++) {
-    var data = d3.json(links[i]).then(function(data) {
-        features = data.features;
-        console.log(features)
-
-        for (j = 0; j < features.length; j++) {
-            geometry = features[j].geometry;
-            coordinates = geometry.coordinates;
-            console.log(coordinates[0])
-        }
-    })
-}
-
-// // retrieves the data from the USGS GeoJSON
-// for (x = 0; x < links.length; x++) {
-
-// var data = d3.json(links[x]).then(function(data) {
-//     console.log(data);
-
-//     var features = data.features;
-
-//     // create lists for the latitude and longitude
-//     var latitudes = features.map(d => d.geometry.coordinates[1])
-//     var longitudes = features.map(d => d.geometry.coordinates[0])
-
-//     // create a list for the magnitudes
-//     var magnitudes = features.map(d => d.properties.mag)
-
-//     // create a list for the depths
-//     var depths = features.map(d => d.geometry.coordinates[2])
-
-//     // combine lists
-//     let info = [];
-//     for (i = 0; i < latitudes.length; i++) {
-//         info.push({'latitude': latitudes[i], 
-//         'longitude': longitudes[i], 
-//         'depth': depths[i], 
-//         'magnitude': magnitudes[i]})
-//     }
-
-//     // create a circle for each earthquake
-//     for (var j = 0; j < info.length; j++) {
-//         var circle = info[j];
-//         timeCircles[x].push(L.circle([circle.latitude, circle.longitude],{
-//             radius: 10000*circle.magnitude,
-//             color:  circleColor(circle.depth),
-//             fillColor: circleColor(circle.depth),
-//             fillOpacity: 0.5,
-//             weight: 0.5
-//         }).bindPopup(`<h1>Magnitude ${circle.magnitude}</h1><h2>Depth: ${circle.depth} km</h2><hr><h3>Lat: ${parseFloat(circle.latitude).toFixed(2)}, Long: ${parseFloat(circle.longitude).toFixed(2)}</h3>`).addTo(myMap));
-//     }
-//     });
-// };
-// // create function to color boroughs
-// function circleColor(depth) {
-//     if (depth <= 10) return 'green'
-//     else if (depth <= 30) return 'yellow'
-//     else if (depth <= 50) return 'beige'
-//     else if (depth <= 70) return 'orange'
-//     else if (depth <= 90) return 'pink'
-//     else if (depth > 90) return 'red'
-//     else return 'black'
-// };
-
-// Pass our map layers into our layer control.
 // Add the layer control to the map.
-L.control.layers(baseMaps, overlayMaps).addTo(myMap);
+L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(myMap);
+
+// add a legend
+var legend = L.control({position: "bottomright"});
+
+legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Depth</h4>";
+  div.innerHTML += '<i style="background: green"></i><span>-10-10</span><br>';
+  div.innerHTML += '<i style="background: yellow"></i><span>10-30</span><br>';
+  div.innerHTML += '<i style="background: beige"></i><span>30-50</span><br>';
+  div.innerHTML += '<i style="background: orange"></i><span>50-70</span><br>';
+  div.innerHTML += '<i style="background: pink"></i><span>70-90</span><br>';
+  div.innerHTML += '<i style="background: red"></i><span>90+</span><br>';
+  
+
+  return div;
+};
+
+legend.addTo(map);
