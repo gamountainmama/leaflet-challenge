@@ -2,13 +2,31 @@
 const myMap = L.map('map', {
     center: [39.829103919622966, -98.57947970000001],
     zoom: 3.5,
-    layer: [street, overlayMaps]
+    layer: street
 });
 
-// Adding the tile layer
+// Adding the initial tile layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap);
+
+// add a legend
+var legend = L.control({ position: 'bottomright' });
+
+legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Depth</h4>";
+  div.innerHTML += '<i style="background: green"></i><span>-10-10</span><br>';
+  div.innerHTML += '<i style="background: yellow"></i><span>10-30</span><br>';
+  div.innerHTML += '<i style="background: beige"></i><span>30-50</span><br>';
+  div.innerHTML += '<i style="background: orange"></i><span>50-70</span><br>';
+  div.innerHTML += '<i style="background: pink"></i><span>70-90</span><br>';
+  div.innerHTML += '<i style="background: red"></i><span>90+</span><br>';
+  
+  return div;
+};
+
+legend.addTo(myMap);
 
 // create a marker (just for fun!!!)
 var marker = L.marker([34.86203568439478, -84.07681774444292], {title: 'Love Shack'}).addTo(myMap)
@@ -21,21 +39,6 @@ var hourCircles = [];
 var dayCircles = [];
 var weekCircles = [];
 var monthCircles = [];
-
-// Create four separate layer groups, one for each time frame.
-var hourLayer = L.layerGroup(hourCircles);
-var dayLayer = L.layerGroup(dayCircles);
-var weekLayer = L.layerGroup(weekCircles);
-var monthLayer = L.layerGroup(monthCircles);
-console.log(hourCircles)
-
-// Create an overlay object.
-var overlayMaps = {
-    'Earthquakes in the past hour': hourLayer,
-    'Earthquakes in the past 24 hours': dayLayer,
-    'Earthquakes in the past 7 days': weekLayer,
-    'Earthquakes in the past 30 days': monthLayer
-  };
 
 // overlay selection links
 var links = [
@@ -61,12 +64,12 @@ var data = d3.json(links[0]).then(function(data) {
         
         hourCircles.push(
         L.circle([latitude, longitude], {
-            radius: 10000*magnitude,
+            radius: 20000*magnitude,
             color: circleColor(depth),
             fillColor: circleColor(depth),
             fillOpacity: 0.5,
             weight: 0.5
-            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`)
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(myMap)
         )
     }
 })
@@ -87,12 +90,12 @@ var data = d3.json(links[1]).then(function(data) {
         
         dayCircles.push(
         L.circle([latitude, longitude], {
-            radius: 10000*magnitude,
+            radius: 20000*magnitude,
             color: circleColor(depth),
             fillColor: circleColor(depth),
             fillOpacity: 0.5,
             weight: 0.5
-            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`)
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(myMap)
         )
     }
 })
@@ -113,12 +116,12 @@ var data = d3.json(links[2]).then(function(data) {
         
         weekCircles.push(
         L.circle([latitude, longitude], {
-            radius: 10000*magnitude,
+            radius: 20000*magnitude,
             color: circleColor(depth),
             fillColor: circleColor(depth),
             fillOpacity: 0.5,
             weight: 0.5
-            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`)
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(myMap)
         )
     }
 })
@@ -139,12 +142,12 @@ var data = d3.json(links[2]).then(function(data) {
         
         monthCircles.push(
         L.circle([latitude, longitude], {
-            radius: 10000*magnitude,
+            radius: 20000*magnitude,
             color: circleColor(depth),
             fillColor: circleColor(depth),
             fillOpacity: 0.5,
             weight: 0.5
-            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`)
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(myMap)
         )
     }
 })
@@ -175,24 +178,19 @@ var baseMaps = {
   Topography: topo
 };
 
+// Create four layer groups, one for each time frame.
+var hourLayer = L.layerGroup(hourCircles);
+var dayLayer = L.layerGroup(dayCircles);
+var weekLayer = L.layerGroup(weekCircles);
+var monthLayer = L.layerGroup(monthCircles);
+
+// Create an overlay object.
+var overlayMaps = {
+    'Earthquakes in the past hour': hourLayer,
+    'Earthquakes in the past 24 hours': dayLayer,
+    'Earthquakes in the past 7 days': weekLayer,
+    'Earthquakes in the past 30 days': monthLayer
+  };
+
 // Add the layer control to the map.
 L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(myMap);
-
-// add a legend
-var legend = L.control({position: "bottomright"});
-
-legend.onAdd = function(map) {
-  var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Depth</h4>";
-  div.innerHTML += '<i style="background: green"></i><span>-10-10</span><br>';
-  div.innerHTML += '<i style="background: yellow"></i><span>10-30</span><br>';
-  div.innerHTML += '<i style="background: beige"></i><span>30-50</span><br>';
-  div.innerHTML += '<i style="background: orange"></i><span>50-70</span><br>';
-  div.innerHTML += '<i style="background: pink"></i><span>70-90</span><br>';
-  div.innerHTML += '<i style="background: red"></i><span>90+</span><br>';
-  
-
-  return div;
-};
-
-legend.addTo(map);
