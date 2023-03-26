@@ -4,4 +4,4 @@ I created a Leaflet map using JavaScript for the earthquake data from the USGS a
 
 I created a toggle for the user to choose a street map or a topographic map, and layers for earthquakes in the past hour, day, week, and month.
 
-The website is hosted at: 
+The website is hosted at: https://gamountainmama.github.io/leaflet-challenge/index.html
