@@ -65,12 +65,12 @@ var data = d3.json(links[0]).then(function(data) {
         
         hourCircles.push(
         L.circle([latitude, longitude], {
-            radius: 20000*magnitude,
+            radius: 30000*magnitude,
             color: circleColor(depth),
             fillColor: circleColor(depth),
             fillOpacity: 0.5,
             weight: 0.5
-            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(myMap)
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(hourLayer)
         )
     }
 })
@@ -89,15 +89,13 @@ var data = d3.json(links[1]).then(function(data) {
         properties = features[j].properties;
         magnitude = properties.mag;
         
-        dayCircles.push(
         L.circle([latitude, longitude], {
-            radius: 20000*magnitude,
+            radius: 30000*magnitude,
             color: circleColor(depth),
             fillColor: circleColor(depth),
             fillOpacity: 0.5,
             weight: 0.5
-            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(myMap)
-        )
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(dayLayer)
     }
 })
 
@@ -115,15 +113,14 @@ var data = d3.json(links[2]).then(function(data) {
         properties = features[j].properties;
         magnitude = properties.mag;
         
-        weekCircles.push(
         L.circle([latitude, longitude], {
-            radius: 20000*magnitude,
+            radius: 30000*magnitude,
             color: circleColor(depth),
             fillColor: circleColor(depth),
             fillOpacity: 0.5,
             weight: 0.5
-            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(myMap)
-        )
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(weekLayer)
+        
     }
 })
 
@@ -143,12 +140,12 @@ var data = d3.json(links[2]).then(function(data) {
         
         monthCircles.push(
         L.circle([latitude, longitude], {
-            radius: 20000*magnitude,
+            radius: 30000*magnitude,
             color: circleColor(depth),
             fillColor: circleColor(depth),
             fillOpacity: 0.5,
             weight: 0.5
-            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(myMap)
+            }).bindPopup(`<h1>Magnitude ${magnitude}</h1><h2>Depth: ${depth}</h2><hr><h3>Lat: ${parseFloat(latitude).toFixed(2)}, Long: ${parseFloat(longitude).toFixed(2)}</h3>`).addTo(monthLayer)
         )
     }
 })
