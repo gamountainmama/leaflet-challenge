@@ -11,17 +11,18 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(myMap);
 
 // add a legend
-var legend = L.control({ position: 'bottomright' });
+var legend = L.control({
+    position: 'bottomright'});
 
 legend.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Depth</h4>";
-  div.innerHTML += '<i style="background: green"></i><span>-10-10</span><br>';
-  div.innerHTML += '<i style="background: yellow"></i><span>10-30</span><br>';
-  div.innerHTML += '<i style="background: beige"></i><span>30-50</span><br>';
-  div.innerHTML += '<i style="background: orange"></i><span>50-70</span><br>';
-  div.innerHTML += '<i style="background: pink"></i><span>70-90</span><br>';
-  div.innerHTML += '<i style="background: red"></i><span>90+</span><br>';
+  div.innerHTML += "<h2>Earthquake Depth</h2>";
+  div.innerHTML += '<i style="background:' + 'green' + '">&nbsp&nbsp&nbsp&nbsp&nbsp;</i>  <span>&nbsp&nbsp-10-10</span><br>';
+  div.innerHTML += '<i style="background:' + 'yellow' + '">&nbsp&nbsp&nbsp&nbsp&nbsp;</i>  <span>&nbsp&nbsp10-30</span><br>';
+  div.innerHTML += '<i style="background:' + 'beige' + '">&nbsp&nbsp&nbsp&nbsp&nbsp;</i>  <span>&nbsp&nbsp30-50</span><br>';
+  div.innerHTML += '<i style="background:' + 'orange' + '">&nbsp&nbsp&nbsp&nbsp&nbsp;</i>  <span>&nbsp&nbsp50-70</span><br>';
+  div.innerHTML += '<i style="background:' + 'pink' + '">&nbsp&nbsp&nbsp&nbsp&nbsp;</i>  <span>&nbsp&nbsp70-90</span><br>';
+  div.innerHTML += '<i style="background:' + 'red' + '">&nbsp&nbsp&nbsp&nbsp&nbsp;</i>  <span>&nbsp&nbsp90+</span><br>';
   
   return div;
 };
