@@ -13,3 +13,27 @@ h1 {text-align: center;}
 h1 {text-align: center;}
 
 select { width: 400px; text-align-last:center; }
+
+.legend { 
+  border: 2px solid black;
+  width: 180px;
+  height: 180px;
+  background: rgb(206, 193, 193);
+  opacity: .85;
+}
+.legend i {  
+  border: 1px solid black;  
+  width: 15px;
+  height: 15px;
+  float: left;
+  margin-left: 8px;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+.legend square {
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    margin-top: 8px;
+}

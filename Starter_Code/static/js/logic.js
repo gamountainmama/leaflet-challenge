@@ -2,7 +2,7 @@
 const myMap = L.map('map', {
     center: [39.829103919622966, -98.57947970000001],
     zoom: 3.5,
-    layer: street
+    layer: [street, overlayMaps]
 });
 
 // Adding the initial tile layer
@@ -16,7 +16,7 @@ var legend = L.control({
 
 legend.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h2>Earthquake Depth</h2>";
+  div.innerHTML += "<h2>&nbspEarthquake Depth</h2>";
   div.innerHTML += '<i style="background:' + 'green' + '">&nbsp&nbsp&nbsp&nbsp&nbsp;</i>  <span>&nbsp&nbsp-10-10</span><br>';
   div.innerHTML += '<i style="background:' + 'yellow' + '">&nbsp&nbsp&nbsp&nbsp&nbsp;</i>  <span>&nbsp&nbsp10-30</span><br>';
   div.innerHTML += '<i style="background:' + 'beige' + '">&nbsp&nbsp&nbsp&nbsp&nbsp;</i>  <span>&nbsp&nbsp30-50</span><br>';
